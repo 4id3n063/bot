@@ -19,7 +19,7 @@ async def on_ready():
     print(f'We have logged in as {clientdiscord.user}')
 
 @clientdiscord.event
-async def do_a_mario(message):
+async def on_message(message):
     if message.author == clientdiscord.user:
         return
 
@@ -35,6 +35,7 @@ async def do_a_mario(message):
         )
         #what the fuck
         await message.channel.send(completion.choices[0].message.content)
+        print(completion.choices[0].message.content)
 
-clientdiscord.run(api_key=os.environ.get("DISCORD_BOT_TOKEN"))
+clientdiscord.run(os.environ.get("DISCORD_BOT_TOKEN"))
 #holy fuck, i removed the token yet it still flagged it???
