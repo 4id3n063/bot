@@ -37,4 +37,4 @@ async def do_a_mario(message):
         await message.channel.send(completion.choices[0].message.content)
 
 
-clientdiscord.run('MTM4Mjg3MDMyNDQwMzUwNzI2Mg.G9-ThX.Xa-5fhqGMtGU98OWviWeo8qozV0eyRQNeSrr2U')
+clientdiscord.run(api_key=os.environ.get("DISCORD_BOT_TOKEN"))
