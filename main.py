@@ -38,3 +38,4 @@ async def do_a_mario(message):
 
 
 clientdiscord.run(api_key=os.environ.get("DISCORD_BOT_TOKEN"))
+#why
