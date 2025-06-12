@@ -36,6 +36,5 @@ async def do_a_mario(message):
         #what the fuck
         await message.channel.send(completion.choices[0].message.content)
 
-
 clientdiscord.run(api_key=os.environ.get("DISCORD_BOT_TOKEN"))
-#why
+#holy fuck, i removed the token yet it still flagged it???
