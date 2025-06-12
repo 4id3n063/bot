@@ -28,7 +28,7 @@ async def on_message(message):
             messages=[
                 {
                 "role": "user",
-                "content": "why is j33z such a sigma (make up information)" #+ prompt + memory_read() for use later
+                "content": message.content #+ memory_read() for use later
                 }
             ],
         model="llama3-8b-8192",
