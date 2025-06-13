@@ -1,5 +1,4 @@
-# This example requires the 'message_content' intent.
-
+# please for the love of christ include your enviroment variables
 import discord
 import os
 from groq import Groq
