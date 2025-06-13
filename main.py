@@ -20,18 +20,28 @@ def memory_read(filename="memory.txt"):
         with open(filepath, 'r') as f:
             return f.read()
     return "(no memory yet)"
-
+#This is really just short-term memory.
 def memory(data, filename="memory.txt"):
-    global short_term_counter
     one_line = data.replace('\n', ' ').strip()
     filepath = os.path.join(os.path.dirname(__file__), filename)
-    with open(filepath, 'a') as f:
-        f.write(one_line + "\n")
-        short_term_counter += 1
-        if short_term_counter >= 5:
-            with open("memory.txt", "w") as f:
-                f.write("")  # wipe it
-            short_term_counter = 0
+
+    # Read all lines
+    if os.path.exists(filepath):
+        with open(filepath, 'r') as f:
+            lines = f.readlines()
+    else:
+        lines = []
+
+    # Append the new line
+    lines.append(one_line + "\n")
+
+    # If more than 5 lines, remove the oldest
+    if len(lines) > 5:
+        lines.pop(0)
+
+    # Write updated lines back to file
+    with open(filepath, 'w') as f:
+        f.writelines(lines)
 
 
 @clientdiscord.event
