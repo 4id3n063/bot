@@ -32,7 +32,7 @@ def memory_storing():
             messages=[
                 {
                 "role": "user",
-                "content": "Only respond with YES or NO. Only YES or NO. If you believe the last message was long-term memory important, say 'YES'. If you believe the last message was short-term memory important, say 'NO'. Be extremely considerate about these options." + memory_read()
+                "content": "Please extremely summarize what this said. Include important details. Everything before 'ai:' is what the user said, while everything after is what the ai said." + completion.choices[0].message.content #always messes this up, ai sucks
                 }
             ],
         model="llama3-8b-8192",
@@ -48,6 +48,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('$test'):
+        global completion
         completion = clientgroq.chat.completions.create(
             messages=[
                 {
@@ -60,9 +61,10 @@ async def on_message(message):
         #what the fuck
         await message.channel.send(completion.choices[0].message.content)
         ai_response = completion.choices[0].message.content
-        memory(f"user: {message.content} ai: {ai_response}")
-        print(completion.choices[0].message.content)
         memory_storing()
+        #what the fuck is even going on here, i genuninely have no clue how i ever got this to function
+        memory(completion_memory.choices[0].message.content)
+        print(completion.choices[0].message.content)
         print(completion_memory.choices[0].message.content)
 
 clientdiscord.run(os.environ.get("DISCORD_BOT_TOKEN"))
