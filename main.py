@@ -13,6 +13,7 @@ clientdiscord = discord.Client(intents=intents)
 
 clientgroq = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 short_term_counter = 0
+prompt = "you are nothing"
 
 def memory_read(filename="memory.txt"):
     filepath = os.path.join(os.path.dirname(__file__), filename)
@@ -46,10 +47,11 @@ def memory(data, filename="memory.txt"):
 
 @clientdiscord.event
 async def on_ready():
-    print(f'go wreak havoc {clientdiscord.user}')
+    print(f'go wreakhavoc {clientdiscord.user}')
     
 @clientdiscord.event
 async def on_message(message):
+    global prompt
     if message.author == clientdiscord.user:
         return
     #this code is so unorganized
@@ -59,20 +61,34 @@ async def on_message(message):
             messages=[
                 {
                 "role": "user",
-                "content": "YOU TALK IN ALL CAPS AND ACT LIKE A REDNECK CONSPIRACIST. YOU LOVE CORN AND BELIEVE THE CIA GLOWIES ARE IN YOUR WALLS, BUT YOU STILL LOVE AMERICA! YOU ARE SCHIZOPHRENIC, TOO." + "these are your memories of past events:" + memory_read() + "this is what they said:" + message.content
+                "content": prompt + "these are your memories of past events. They are not apart of the user's response.:" + memory_read() + "this is what the user said:" + message.content[len('$test '):].strip()
                 }
-            ],
+            ], 
         model="llama3-8b-8192",
 
         )
 
         await message.channel.send(completion.choices[0].message.content)
         global userinput
-        userinput = message.content
+        userinput = message.content[len('$test '):].strip()
         ai_response = completion.choices[0].message.content
         #what the fuck is even going on here, i genuninely have no clue how i ever got this to function
-        memory("user:" + message.content + " ai:" + completion.choices[0].message.content)
+        memory("user:" + message.content[len('$test '):].strip() + " ai:" + completion.choices[0].message.content)
         print(completion.choices[0].message.content)
+    
+    if message.content.startswith('$wipe'):
+        def wipe(filename="memory.txt"):
+                   filepath = os.path.join(os.path.dirname(__file__), filename)
+                   with open(filepath, "w") as f:
+                        f.write("")
+        wipe()
+        await message.channel.send('fuck...')
+        print("memory wiped, what the fuck you monster")
+    
+    if message.content.startswith('$prompt'):
+        prompt = message.content[len('$prompt '):].strip()
+        print("Prompt set to " + prompt)
+        await message.channel.send("Prompt set to " + prompt)
 
 
 
